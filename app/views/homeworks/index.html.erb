@@ -1,0 +1,44 @@
+<%- model_class = Homework -%>
+<div class="page-header">
+  <%= link_to t('.new', :default => t("helpers.links.new")), new_homework_path, :class => 'btn btn-primary pull-right' %>
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-hover table-striped table-bordered table-condensed">
+  <thead>
+    <tr>
+      <!-- <th><%= model_class.human_attribute_name(:id) %></th> -->
+      <th><%= model_class.human_attribute_name(:student_id) %></th>
+      <th><%= model_class.human_attribute_name(:title) %></th>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:total_evaluations) %></th>
+      <th><%= model_class.human_attribute_name(:evaluations_average) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:created_at) %></th> -->
+      <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <% @homeworks.sort_by { |h| h.evaluations.average(:score) }.reverse.each do |homework| %>
+      <tr>
+        <!-- <td><%= link_to homework.id, homework_path(homework) %></td> -->
+        <td><%= homework.student.name %></td>
+        <td><%= homework.title %></td>
+        <td><%= homework.description %></td>
+        <td><%= homework.evaluations.size -%></td>
+        <td><%= number_with_precision(homework.evaluations.average(:score)*2, precision: 1) -%></td>
+        <!-- <td><%=l homework.created_at %></td> -->
+        <!-- <td> 
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_homework_path(homework), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      homework_path(homework),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+        -->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+

@@ -1,0 +1,36 @@
+<%- model_class = Student -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @student.name %></dd>
+</dl>
+
+<hr>
+
+<fieldset>
+	<legend>Homeworks</legend>
+	<ul>
+		<% @student.homeworks.each do |homework| %>
+		<li>
+			<p><strong>Title: </strong> <%= homework.title -%></p>
+			<p><strong>Description:</strong> <%= homework.description -%></p>
+			<p><strong>Total Evaluations: <%= homework.evaluations.size -%></strong></p>
+			<p><strong>Evaluations Average: <td><%= number_with_precision(homework.evaluations.average(:score), precision: 1) -%></td></strong></p>
+			<hr>
+		</li>
+		<% end %>
+	</ul>
+</fieldset>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              students_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_student_path(@student), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              student_path(@student),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

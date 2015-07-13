@@ -1,0 +1,33 @@
+<%= simple_nested_form_for @student do |f| %>
+	<%= f.input :name %>
+	<%= error_span(@student[:name]) %>
+
+	<fieldset>
+		<legend>Homeworks</legend>
+		<%= f.fields_for :homeworks do |homework| %>
+			<div class="well well-sm">
+				<%= homework.input :title %>
+				<%= homework.input :description %>
+			  	<%= homework.link_to_remove "Remove this homework", class: 'btn btn-danger btn-block btn-xs' %>
+				<hr>
+
+				<legend>Evaluations</legend>
+				<%= homework.fields_for :evaluations do |evaluation| %>
+					<%= evaluation.association :student, collection: Student.all.map {|s| ["#{s.id} - #{s.name}", s.id]}, prompt: 'Select a student' %>
+					<div class="form-inline well well-sm">
+						<%= evaluation.input :score, as: :radio_buttons, collection: Evaluation::SCORES %>
+					</div>
+				  	<%= evaluation.link_to_remove "Remove this evaluation", class: 'btn btn-danger btn-block btn-xs' %>
+					<hr>
+				<% end %>
+				<p><%= homework.link_to_add "Add a evaluation", :evaluations, class: 'btn btn-block btn-success' %></p>
+			</div>
+		<% end %>
+		<p><%= f.link_to_add "Add a homework", :homeworks, class: 'btn btn-block btn-primary btn-lg' %></p>
+
+	</fieldset>
+
+	<%= f.button :button, nil, :class => 'btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Saving..."} %>
+	<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+	            students_path, :class => 'btn btn-default' %>
+<% end %>

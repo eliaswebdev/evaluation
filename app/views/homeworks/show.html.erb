@@ -1,0 +1,55 @@
+<%- model_class = Homework -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:student_id) %>:</strong></dt>
+  <dd><%= @homework.student.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
+  <dd><%= @homework.title %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @homework.description %></dd>
+</dl>
+
+<fieldset>
+  <legend>Evaluations</legend>
+  <table class="table table-hover table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @homework.evaluations.each do |evaluation| %>
+      <tr>
+        <td><%= evaluation.student.name -%></td>
+        <td><%= evaluation.score -%></td>
+      </tr>
+      <% end %>
+    </tbody>
+    
+    <tfoot>
+      <tr>
+        <th>Total Evaluations:</th>
+        <td><%= @homework.evaluations.size -%></td>
+      </tr>
+      <tr>
+        <th>Evaluations Average:</th>
+        <td><%= @homework.evaluations.average(:score) -%></td>
+      </tr>
+    </tfoot>
+
+  </table>
+</fieldset>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              homeworks_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_homework_path(@homework), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              homework_path(@homework),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
